@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1792173763616,
+      "tag": "0000_appointments_agents_ads",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792351181421,
+      "tag": "0001_newsletter_and_bot_challenges",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792618390551,
+      "tag": "0002_site_gallery_and_hero_video",
+      "breakpoints": true
+    }
+  ]
+}
