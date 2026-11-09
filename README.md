@@ -24,3 +24,22 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+## Production deployment
+
+Apply the Supabase migrations to the production project with `supabase db push`. This provisions the database schema and the private `property-images` and `site-media` storage buckets used by the admin image tools.
+
+Configure these variables in the deployment environment:
+
+- `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` for server-side Supabase access.
+- `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` with the same project URL and publishable key for browser sign-in.
+- `SUPABASE_SERVICE_ROLE_KEY` for authenticated admin uploads and private media delivery. Keep this server-only; never use a `VITE_` prefix.
+- `CAPTCHA_SECRET` as a private random secret for production sign-in and form CAPTCHA signing.
+
+Enable email/password sign-in in Supabase Auth and set the production site URL and allowed redirect URLs to the deployed domain. Before signing in as the initial administrator, make sure that account's exact email is in `public.admin_allowlist`; the initial seed address is defined in the Supabase migrations. For a different admin email, add it in the Supabase SQL editor:
+
+```sql
+INSERT INTO public.admin_allowlist (email, note)
+VALUES ('your-admin@example.com', 'Initial administrator')
+ON CONFLICT (email) DO NOTHING;
+```

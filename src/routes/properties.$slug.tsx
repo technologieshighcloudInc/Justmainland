@@ -91,7 +91,52 @@ function PropertyDetail() {
         </Link>
       </div>
 
-      <section className="mx-auto grid max-w-7xl gap-10 px-5 py-8 sm:px-8 lg:grid-cols-[1.55fr_1fr] lg:gap-14">
+      <section className="mx-auto flex max-w-7xl flex-col gap-10 px-5 py-8 sm:px-8">
+        <aside className="lg:self-start">
+          <div className="rounded-2xl glass-panel p-6 sm:p-7">
+            <div className="flex flex-wrap gap-2">
+              <span className="rounded-full bg-accent/15 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-accent">
+                {kindLabel(property.listing_kind)}
+              </span>
+              <span className="rounded-full border border-border px-3 py-1 text-[0.65rem] uppercase tracking-[0.16em] text-muted-foreground">
+                {typeLabel(property.property_type)}
+              </span>
+              {unavailable ? (
+                <span className="rounded-full bg-destructive/20 px-3 py-1 text-[0.65rem] uppercase tracking-[0.16em] text-destructive">
+                  {statusLabel(property.status)}
+                </span>
+              ) : null}
+            </div>
+
+            <h1 className="mt-5 font-display text-3xl font-semibold leading-tight">
+              {property.title}
+            </h1>
+            <p className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+              <MapPin className="size-4 text-accent" />
+              {[property.area, property.city].filter(Boolean).join(", ")}
+            </p>
+
+            <p className="mt-6 font-display text-3xl font-semibold text-gradient">
+              {formatPriceFull(Number(property.price), property.currency)}
+              {property.price_period ? (
+                <span className="ml-1 text-base text-muted-foreground">
+                  / {property.price_period}
+                </span>
+              ) : null}
+            </p>
+
+            <dl className="mt-7 grid grid-cols-3 gap-4 border-t border-border pt-6 text-center">
+              <Spec icon={BedDouble} value={property.bedrooms} label="Beds" />
+              <Spec icon={Bath} value={property.bathrooms} label="Baths" />
+              <Spec
+                icon={Ruler}
+                value={property.size_sqm ? `${Number(property.size_sqm)}` : "—"}
+                label="sqm"
+              />
+            </dl>
+          </div>
+        </aside>
+
         <div>
           <div className="overflow-hidden rounded-3xl glass-panel">
             <img
@@ -138,7 +183,10 @@ function PropertyDetail() {
               <h2 className="font-display text-2xl font-semibold">Features</h2>
               <ul className="mt-5 grid gap-3 sm:grid-cols-2">
                 {property.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3 text-sm text-muted-foreground">
+                  <li
+                    key={feature}
+                    className="flex items-start gap-3 text-sm text-muted-foreground"
+                  >
                     <Check className="mt-0.5 size-4 shrink-0 text-accent" />
                     {feature}
                   </li>
@@ -148,63 +196,15 @@ function PropertyDetail() {
           ) : null}
         </div>
 
-        <aside className="lg:sticky lg:top-28 lg:self-start">
-          <div className="rounded-2xl glass-panel p-6 sm:p-7">
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full bg-accent/15 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-accent">
-                {kindLabel(property.listing_kind)}
-              </span>
-              <span className="rounded-full border border-border px-3 py-1 text-[0.65rem] uppercase tracking-[0.16em] text-muted-foreground">
-                {typeLabel(property.property_type)}
-              </span>
-              {unavailable ? (
-                <span className="rounded-full bg-destructive/20 px-3 py-1 text-[0.65rem] uppercase tracking-[0.16em] text-destructive">
-                  {statusLabel(property.status)}
-                </span>
-              ) : null}
-            </div>
+        <div>
+          <h2 className="mb-4 font-display text-lg font-semibold">Book an inspection</h2>
+          <InspectionForm propertyId={property.id} propertyTitle={property.title} />
+        </div>
 
-            <h1 className="mt-5 font-display text-3xl font-semibold leading-tight">
-              {property.title}
-            </h1>
-            <p className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
-              <MapPin className="size-4 text-accent" />
-              {[property.area, property.city].filter(Boolean).join(", ")}
-            </p>
-
-            <p className="mt-6 font-display text-3xl font-semibold text-gradient">
-              {formatPriceFull(Number(property.price), property.currency)}
-              {property.price_period ? (
-                <span className="ml-1 text-base text-muted-foreground">
-                  / {property.price_period}
-                </span>
-              ) : null}
-            </p>
-
-            <dl className="mt-7 grid grid-cols-3 gap-4 border-t border-border pt-6 text-center">
-              <Spec icon={BedDouble} value={property.bedrooms} label="Beds" />
-              <Spec icon={Bath} value={property.bathrooms} label="Baths" />
-              <Spec
-                icon={Ruler}
-                value={property.size_sqm ? `${Number(property.size_sqm)}` : "—"}
-                label="sqm"
-              />
-            </dl>
-          </div>
-
-          <div className="mt-6">
-            <h2 className="mb-4 font-display text-lg font-semibold">Book an inspection</h2>
-            <InspectionForm propertyId={property.id} propertyTitle={property.title} />
-          </div>
-
-          <div className="mt-6">
-            <h2 className="mb-4 font-display text-lg font-semibold">Enquire about this property</h2>
-            <EnquiryForm
-              propertyId={property.id}
-              defaultSubject={`Enquiry: ${property.title}`}
-            />
-          </div>
-        </aside>
+        <div>
+          <h2 className="mb-4 font-display text-lg font-semibold">Enquire about this property</h2>
+          <EnquiryForm propertyId={property.id} defaultSubject={`Enquiry: ${property.title}`} />
+        </div>
       </section>
 
       {related.length > 0 ? (

@@ -41,7 +41,7 @@ export function SiteHeader() {
             alt="JustMainlandNG Real Estate"
             width={358}
             height={247}
-            className="h-14 w-auto max-w-32 object-contain"
+            className="h-14 w-auto max-w-32 rounded-md object-contain"
           />
         </Link>
 
